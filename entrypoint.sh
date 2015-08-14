@@ -15,8 +15,13 @@ if [ -z "$RABBIT_PASSWORD" ];then
   exit 1
 fi
 
-if [ -z "$KEYSTONE_ENDPOINT" ];then
-  echo "error: KEYSTONE_ENDPOINT not set"
+if [ -z "$KEYSTONE_INTERNAL_ENDPOINT" ];then
+  echo "error: KEYSTONE_INTERNAL_ENDPOINT not set"
+  exit 1
+fi
+
+if [ -z "$KEYSTONE_ADMIN_ENDPOINT" ];then
+  echo "error: KEYSTONE_ADMIN_ENDPOINT not set"
   exit 1
 fi
 
@@ -30,8 +35,9 @@ if [ -z "$LOCAL_IP" ];then
   exit 1
 fi
 
-if [ -z "$NOVA_ENDPOINT" ];then
-  echo "error: NOVA_ENDPOINT not set."
+# NOVA_METADATA_IP = pillar['nova']['internal_endpoint']
+if [ -z "$NOVA_METADATA_IP" ];then
+  echo "error: NOVA_METADATA_IP not set."
   exit 1
 fi
 
@@ -54,8 +60,8 @@ CRUDINI='/usr/bin/crudini'
 
     $CRUDINI --del /etc/neutron/neutron.conf keystone_authtoken
 
-    $CRUDINI --set /etc/neutron/neutron.conf keystone_authtoken auth_uri http://$KEYSTONE_ENDPOINT:5000
-    $CRUDINI --set /etc/neutron/neutron.conf keystone_authtoken auth_url http://$KEYSTONE_ENDPOINT:35357
+    $CRUDINI --set /etc/neutron/neutron.conf keystone_authtoken auth_uri http://$KEYSTONE_INTERNAL_ENDPOINT:5000
+    $CRUDINI --set /etc/neutron/neutron.conf keystone_authtoken auth_url http://$KEYSTONE_ADMIN_ENDPOINT:35357
     $CRUDINI --set /etc/neutron/neutron.conf keystone_authtoken auth_plugin password
     $CRUDINI --set /etc/neutron/neutron.conf keystone_authtoken project_domain_id default
     $CRUDINI --set /etc/neutron/neutron.conf keystone_authtoken user_domain_id default
@@ -67,8 +73,8 @@ CRUDINI='/usr/bin/crudini'
     $CRUDINI --set /etc/neutron/neutron.conf DEFAULT service_plugins neutron.services.l3_router.l3_router_plugin.L3RouterPlugin
     $CRUDINI --set /etc/neutron/neutron.conf DEFAULT allow_overlapping_ips True
 
-    $CRUDINI --set /etc/neutron/metadata_agent.ini DEFAULT auth_uri http://$KEYSTONE_ENDPOINT:5000
-    $CRUDINI --set /etc/neutron/metadata_agent.ini DEFAULT auth_url http://$KEYSTONE_ENDPOINT:35357
+    $CRUDINI --set /etc/neutron/metadata_agent.ini DEFAULT auth_uri http://$KEYSTONE_INTERNAL_ENDPOINT:5000
+    $CRUDINI --set /etc/neutron/metadata_agent.ini DEFAULT auth_url http://$KEYSTONE_ADMIN_ENDPOINT:35357
     $CRUDINI --set /etc/neutron/metadata_agent.ini DEFAULT auth_region regionOne
     $CRUDINI --set /etc/neutron/metadata_agent.ini DEFAULT auth_plugin  password
     $CRUDINI --set /etc/neutron/metadata_agent.ini DEFAULT project_domain_id default
@@ -76,7 +82,7 @@ CRUDINI='/usr/bin/crudini'
     $CRUDINI --set /etc/neutron/metadata_agent.ini DEFAULT project_name service
     $CRUDINI --set /etc/neutron/metadata_agent.ini DEFAULT username neutron
     $CRUDINI --set /etc/neutron/metadata_agent.ini DEFAULT password $NEUTRON_PASS
-    $CRUDINI --set /etc/neutron/metadata_agent.ini DEFAULT nova_metadata_ip $NOVA_ENDPOINT
+    $CRUDINI --set /etc/neutron/metadata_agent.ini DEFAULT nova_metadata_ip $NOVA_METADATA_IP
     
     $CRUDINI --set /etc/neutron/metadata_agent.ini DEFAULT metadata_proxy_shared_secret $METADATA_PROXY_SHARED_SECRET
  
