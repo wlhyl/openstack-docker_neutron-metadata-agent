@@ -80,7 +80,7 @@ CRUDINI='/usr/bin/crudini'
 
     $CRUDINI --set /etc/neutron/metadata_agent.ini DEFAULT auth_uri http://$KEYSTONE_INTERNAL_ENDPOINT:5000
     $CRUDINI --set /etc/neutron/metadata_agent.ini DEFAULT auth_url http://$KEYSTONE_ADMIN_ENDPOINT:35357
-    $CRUDINI --set /etc/neutron/metadata_agent.ini DEFAULT auth_region $auth_region
+    $CRUDINI --set /etc/neutron/metadata_agent.ini DEFAULT auth_region $AUTH_REGION
     $CRUDINI --set /etc/neutron/metadata_agent.ini DEFAULT auth_plugin  password
     $CRUDINI --set /etc/neutron/metadata_agent.ini DEFAULT project_domain_id default
     $CRUDINI --set /etc/neutron/metadata_agent.ini DEFAULT user_domain_id default
