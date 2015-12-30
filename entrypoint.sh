@@ -46,8 +46,8 @@ if [ -z "$METADATA_PROXY_SHARED_SECRET" ];then
   exit 1
 fi
 
-if [ -z "$AUTH_REGION" ];then
-  echo "error: AUTH_REGION not set."
+if [ -z "$REGION_NAME" ];then
+  echo "error: REGION_NAME not set."
   exit 1
 fi
 
@@ -75,12 +75,12 @@ CRUDINI='/usr/bin/crudini'
     $CRUDINI --set /etc/neutron/neutron.conf keystone_authtoken password $NEUTRON_PASS
     
     $CRUDINI --set /etc/neutron/neutron.conf DEFAULT core_plugin neutron.plugins.ml2.plugin.Ml2Plugin
-    $CRUDINI --set /etc/neutron/neutron.conf DEFAULT service_plugins neutron.services.l3_router.l3_router_plugin.L3RouterPlugin
+    $CRUDINI --set /etc/neutron/neutron.conf DEFAULT service_plugins router
     $CRUDINI --set /etc/neutron/neutron.conf DEFAULT allow_overlapping_ips True
 
     $CRUDINI --set /etc/neutron/metadata_agent.ini DEFAULT auth_uri http://$KEYSTONE_INTERNAL_ENDPOINT:5000
     $CRUDINI --set /etc/neutron/metadata_agent.ini DEFAULT auth_url http://$KEYSTONE_ADMIN_ENDPOINT:35357
-    $CRUDINI --set /etc/neutron/metadata_agent.ini DEFAULT auth_region $AUTH_REGION
+    $CRUDINI --set /etc/neutron/metadata_agent.ini DEFAULT auth_region $REGION_NAME
     $CRUDINI --set /etc/neutron/metadata_agent.ini DEFAULT auth_plugin  password
     $CRUDINI --set /etc/neutron/metadata_agent.ini DEFAULT project_domain_id default
     $CRUDINI --set /etc/neutron/metadata_agent.ini DEFAULT user_domain_id default

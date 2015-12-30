@@ -6,7 +6,7 @@
 - KEYSTONE_ADMIN_ENDPOINT: keystone admin endpoint
 - NEUTRON_PASS: openstack neutron密码
 - NOVA_METADATA_IP: nova internal endpoint
-- AUTH_REGION: RegionOne
+- REGION_NAME: RegionOne
 
 # volumes:
 - /etc/neutron/: /etc/neutron
@@ -23,6 +23,6 @@ docker run -d --name neutron-metadata-agent \
     -e KEYSTONE_ADMIN_ENDPOINT=10.64.0.52 \
     -e NEUTRON_PASS=neutron_pass \
     -e NOVA_METADATA_IP=10.64.0.52 \
-    -e AUTH_REGION=RegionOne \
+    -e REGION_NAME=RegionOne \
     10.64.0.50:5000/lzh/neutron-metadata-agent:kilo
 ```
